@@ -25,17 +25,27 @@ public class SimpleList {
 	}
 
 	/**
-	 * Adds the data to start of list. The last element falls off if list is full
+	 * Adds the data to start of list. 
 	 *
 	 * @param data the data
 	 */
 	public void add(int data) {
-		for (int i = Math.min(count, list.length - 1); i > 0; i--) {
+		if (list.length == count) {
+			int newLength = (int) (list.length + Math.ceil(list.length * 0.5));
+			int[] newList = new int[newLength];
+			for (int i = 0; i < list.length; i++) {
+				newList[i] = list[i];
+			}
+
+			list = newList;
+		}
+
+		for (int i = count; i > 0; i--) {
 			list[i] = list[i - 1];
 		}
 
 		list[0] = data;
-		count = Math.min(count + 1, list.length);
+		count++;
 
 	}
 
@@ -51,6 +61,19 @@ public class SimpleList {
 				list[i - 1] = list[i];
 			}
 			count--;
+
+			int emptySpaces = list.length - count;
+
+			if (emptySpaces * 100 / list.length > 25 && list.length > 1) {
+				int newLength = (int) (Math.floor(list.length * 0.75));
+				int[] newList = new int[newLength];
+				for (int i = 0; i < newList.length; i++) {
+					newList[i] = list[i];
+				}
+
+				list = newList;
+			}
+
 		}
 
 	}
@@ -93,5 +116,51 @@ public class SimpleList {
 
 		return -1;
 	}
+
+	/**
+	 * Add the data to end of list.
+	 *
+	 * @param data the data
+	 */
+	public void append(int data) {
+		if (list.length == count) {
+			int newLength = (int) (list.length + Math.ceil(list.length * 0.5));
+			int[] newList = new int[newLength];
+			for (int i = 0; i < list.length; i++) {
+				newList[i] = list[i];
+			}
+
+			list = newList;
+		}
+
+		list[count++] = data;
+	}
+	
+	/**
+	 * First element in list
+	 * @return the element, -1 if empty
+	 */
+	public int first() {
+		return count == 0 ? -1 : list[0];
+	}
+	
+	/**
+	 * Last element in list
+	 * @return the element, -1 if empty
+	 */
+	public int last() {
+		return count == 0 ? -1 : list[count - 1];
+	}
+	
+	/**
+	 * Return the size of the list
+	 * @return the size
+	 */
+	public int size() {
+		return count;
+	}
+	
+
+	
 
 }
